@@ -1,0 +1,6 @@
+.venv/
+.idea/
+save/
+App/__pycache__
+User/
+saverus_save.json

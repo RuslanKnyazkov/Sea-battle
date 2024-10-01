@@ -1,90 +1,33 @@
 from typing import Any
+from customtkinter import (CTk, CTkFrame)
 
-from customtkinter import (CTk, CTkFrame, CTkButton,
-                           CTkLabel, CTkEntry)
-from User.player import Player
-from config import  maps
-
+from config import test_insert_the_maps
+from game_area import UserArea, AiArea
 
 class Root(CTk):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         self.frame = GameFrame(self)
-        self.frame.pack(expand = True)
-
-
+        self.frame.pack(expand=True, fill = 'x')
 
 class GameFrame(CTkFrame):
     def __init__(self, master: Any, **kwargs):
         super().__init__(master, **kwargs)
 
-        self.t = Area(self)
-        self.t.create_area()
-        self.t.grid( column = 1, row = 1, padx = 20)
+        for i in range(2): self.columnconfigure(index = i, weight = i)
 
-        self.g = Area(self)
-        self.g.create_area()
-        self.g.grid( column = 2, row = 1, padx = 20)
+        self.__player_area = UserArea(self)
+        self.__player_area.pack(side = 'left', padx = 30, expand = True, pady = 30)
+        self.__player_area.create_area()
 
-        self.entry_column = EntryPoints(self, holder_text='Please choice column')
-        self.entry_column.grid(column = 1, row = 2, padx = 20)
-
-        self.entry_row = EntryPoints(self, holder_text='Please choice row')
-        self.entry_row.grid(column = 1, row = 3, padx = 20)
-
-        self.btn_confirm = CTkButton(self, text='Confirm', command= self.test_foo)
-        self.btn_confirm.grid(column = 2, row = 2)
-
-    def test_foo(self):
-        #Player('Ruslan',self.entry_column.get(), int(self.entry_row.get()) - 1)
-        maps[self.entry_column.get()][int(self.entry_row.get())] = 'x'
-        self.update_area()
-
-    def update_area(self):
-        if self.t is not None:
-            self.t.destroy()
-        self.t = Area(self)
-        self.t.grid( column = 1, row = 1, padx = 20)
-
-
-class Area(CTkFrame):
-    def __init__(self, master: Any, **kwargs):
-        super().__init__(master, **kwargs)
-
-        for _ in range(10): self.columnconfigure(index=_, weight=1)
-        for _ in range(10): self.rowconfigure(index=_, weight=1)
-        self.create_area()
-
-    def create_area(self, user: bool = False, ai: bool = False,
-                    map: dict = maps):
-
-        for column in enumerate(map.keys()):
-            for row in range(len(maps[column[1]])):
-                title = column[1] if row == 0 else ""
-                Point(self, column=title, row=maps[column[1]][row]).grid(column=column[0],
-                row=row, padx=1, pady=1)
-
-
-class Point(CTkFrame):
-    def __init__(self, master: Any, column: str = "",
-                 row: str | int = None,):
-        super().__init__(master)
-
-        self.column = column
-        self.row = row
-
-        self.test = CTkLabel(self, text=self.column,fg_color= 'blue' if self.row != 'x' else 'red',
-                 height=25, width=25).pack()
-
-
-
-class EntryPoints(CTkEntry):
-    def __init__(self, master, holder_text):
-        super().__init__(master, placeholder_text=holder_text)
+        self.__ai_area = AiArea(self)
+        self.__ai_area.pack(side = 'right', padx = 30, expand = True, pady = 30)
+        self.__ai_area.create_area()
 
 
 if __name__ == '__main__':
+    test_insert_the_maps()
     root = Root()
-    root.geometry('700x700+0+0')
+    root.geometry('800x800+0+0')
     root.mainloop()
