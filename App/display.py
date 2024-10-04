@@ -1,6 +1,6 @@
 from typing import Any
 from customtkinter import (CTk, CTkFrame, CTkButton)
-from game_area import UserArea, AiArea, Test
+from game_area import UserArea, AiArea
 from User.player import Player
 
 class MainRoot(CTk):
@@ -9,19 +9,6 @@ class MainRoot(CTk):
 
         self.test = GameFrame(self)
         self.test.pack(expand=True, fill = 'x')
-
-
-class SettingRoot(CTk):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        self.frame = Test(self)
-        self.frame.pack()
-
-        CTkButton(self, text='Confirm', command=self.change_frame_view).pack()
-
-    def change_frame_view(self):
-        self.quit()
 
 
 class GameFrame(CTkFrame):
@@ -41,8 +28,6 @@ class GameFrame(CTkFrame):
 
 
 if __name__ == '__main__':
-    sett =SettingRoot()
-    sett.mainloop()
     root = MainRoot()
     root.geometry('800x800+0+0')
     root.mainloop()
