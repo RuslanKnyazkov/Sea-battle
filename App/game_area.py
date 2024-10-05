@@ -1,49 +1,13 @@
+from cell import PlayerCell, AiCell
+from random import randint, choice
 from customtkinter import CTkFrame, CTkLabel
 from typing import Any
-from config import player_map, ai_map, winner
-from Handler.handler import Handler
-
-handler = Handler()
-
-class Point(CTkFrame):
-    def __init__(self, master: Any, view, column: str,
-                 unique_id: int, row: str | int):
-        super().__init__(master)
-
-        self.column = column
-        self.row = row
-        self.view = view
-        self.unique = unique_id
-
-        self.color = CTkLabel(self, text=self.view if self.row == 1 else '', fg_color='blue',
-                              height=25, width=25)
-        self.color.pack()
-        self.color.bind('<Button-1>', command=lambda event: self.refactor_value_cell(event))
-
-    def set_color(self):
-        """
-        After pushing button on mouse start processing check совпадения символов.
-        :param event: Mouse button
-        """
-        if self.row == 'x':
-            self.color.configure(fg_color='red', text='X')
-        elif self.row != 'x' and self.row != 1:
-            self.color.configure(fg_color='white', text='O')
-
-    @handler.block_handler
-    def refactor_value_cell(self, event):
-        """
-        Change values cell on symbol 'o' .
-        :param obj: Instance Point
-        :param array: Map
-        :return: None
-        """
-        if str(self.__getattribute__('master')) == '.!gameframe.!aiarea':
-            self.set_color()
-            ai_map[self.column][self.unique] = 'o'
-        handler.automatic_step = True
+from config import player_map, ai_map, SHIPS, CHARACTERS
 
 
+# from Handler.handler import Handler
+
+# handler = Handler()
 
 class Area(CTkFrame):
     def __init__(self, master: Any, **kwargs):
@@ -64,27 +28,30 @@ class UserArea(Area):
         super().__init__(master, **kwargs)
 
         self.label = CTkLabel(self, text='Player').grid(columnspan=11)
-        self.automatick_check()
-
 
     def create_area(self):
         for column in enumerate(player_map.keys()):
             for row in range(len(player_map[column[1]])):
                 title = column[1]
-                self.point_collect[f'{column[1]}:{row}'] = Point(self, view=title,
-                                                                 column=column[1], row=player_map[column[1]][row],
-                                                                 unique_id=row)
+                self.point_collect[f'{column[1]}:{row}'] = PlayerCell(self, view=title,
+                                                                      column=column[1],
+                                                                      row=player_map[column[1]][row],
+                                                                      unique_id=row)
                 self.point_collect[f'{column[1]}:{row}'].grid(column=column[0] + 1, row=row + 1, padx=1, pady=1)
-
-    def automatick_check(self):
-        if handler.automatic_step is False:
-            print('True')
-        else:
-            random_cell = handler.shoot()
-            self.point_collect[f'{random_cell[0]}:{random_cell[1]}'].set_color()
-            handler.automatic_step = False
-        self.after(2000, self.automatick_check)
-
+    #     self.automatic_check()
+    #
+    # def automatic_check(self):
+    #     """
+    #     Checks if the player's move has been completed
+    #     :return: None
+    #     """
+    #     if handler.automatic_step is False:
+    #         ...
+    #     else:
+    #         random_column , random_row = handler.shoot()
+    #         self.point_collect[f'{random_column}:{random_row}'].set_color()
+    #         handler.automatic_step = False
+    #     self.after(2000, self.automatic_check)
 
 
 class AiArea(Area):
@@ -94,15 +61,30 @@ class AiArea(Area):
         self.label = CTkLabel(self, text='AI').grid(columnspan=11)
 
     def create_area(self):
+        self.auto_plases_ship()
         for column in enumerate(ai_map.keys()):
             for row in range(len(ai_map[column[1]])):
-
-                if column[1] == '':
-                    title = row
-                else:
-                    title = column[1] if row == 0 else ""
-
-                self.point_collect[f'{column[1]}:{row}'] = Point(self, view=title,
-                                                                 column=column[1], row=ai_map[column[1]][row],
-                                                                 unique_id=row)
+                title = column[1] if row == 0 else ""
+                self.point_collect[f'{column[1]}:{row}'] = AiCell(self, view=title,
+                                                                  column=column[1], row=ai_map[column[1]][row],
+                                                                  unique_id=row)
                 self.point_collect[f'{column[1]}:{row}'].grid(column=column[0] + 1, row=row + 1, padx=1, pady=1)
+
+    def auto_plases_ship(self):
+        """
+        Automatic insert into Ai maps ship on vertical positions.
+        :return: None
+        """
+
+        ship_number = 0
+
+        while len(SHIPS) != ship_number:
+            try:
+                for ship in SHIPS:
+                    random_number = randint(1, 11)
+                    random_field = choice(CHARACTERS)
+                    for j in range(len(ship)):
+                        ai_map[random_field][random_number + j] = 'x'
+                    ship_number += 1
+            finally:
+                continue
