@@ -45,9 +45,10 @@ class PlayerCell(Cell):
 
         self.color.bind('<Button-1>', command=lambda event: self.refactor_value_cell(event))
 
-
+    @hand.set_position_ships
     def refactor_value_cell(self, event):
-        player_map[self.column][self.unique] = 'X'
+        player_map[self.column][self.unique] = 'x'
+        self.row = 'x'
         self.set_color()
 
 

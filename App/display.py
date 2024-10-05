@@ -25,6 +25,7 @@ class GameFrame(CTkFrame):
 
     def bild_area(self):
         player = Player(name=self.entry_user_name.get())
+        self.entry_user_name.destroy(), self.btn_confirm.destroy()
 
         self.__player_area = UserArea(self, user=player)
         self.__player_area.pack(side = 'left', padx = 30, expand = True, pady = 30)

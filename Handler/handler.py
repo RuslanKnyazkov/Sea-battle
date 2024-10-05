@@ -10,6 +10,8 @@ class Handler:
     def __init__(self):
 
         self.automatic_step = False
+        self.ship = SHIPS.copy()
+        self.run = False
 
 
 
@@ -23,7 +25,7 @@ class Handler:
         :return: None
         """
         def wrapper(*args, **kwargs):
-            if self.automatic_step:
+            if self.automatic_step and not self.run:
                 ...
             else:
                 funk(*args, **kwargs)
@@ -32,5 +34,15 @@ class Handler:
 
     def set_position_ships(self, funk: Callable):
         def wrapper(*args, **kwargs):
-            ...
+            numbers = 0
+            count = 1
+            if count < len(self.ship[numbers]):
+                count += 1
+                funk(*args, **kwargs)
+            elif len(self.ship) == 0:
+                self.run = True
+            else:
+                count = 0
+                self.ship.pop(0)
+        return wrapper
 
