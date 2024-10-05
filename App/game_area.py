@@ -4,11 +4,6 @@ from customtkinter import CTkFrame, CTkLabel
 from typing import Any
 from config import player_map, ai_map, SHIPS, CHARACTERS
 
-
-# from Handler.handler import Handler
-
-# handler = Handler()
-
 class Area(CTkFrame):
     def __init__(self, master: Any, **kwargs):
         super().__init__(master, **kwargs)

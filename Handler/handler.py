@@ -10,8 +10,8 @@ class Handler:
     def __init__(self):
 
         self.automatic_step = False
-        self.ship = SHIPS.copy()
         self.run = False
+        self.avaliable_count = 15
 
 
 
@@ -34,15 +34,10 @@ class Handler:
 
     def set_position_ships(self, funk: Callable):
         def wrapper(*args, **kwargs):
-            numbers = 0
-            count = 1
-            if count < len(self.ship[numbers]):
-                count += 1
+            if self.avaliable_count != 0:
                 funk(*args, **kwargs)
-            elif len(self.ship) == 0:
-                self.run = True
+                self.avaliable_count -= 1
             else:
-                count = 0
-                self.ship.pop(0)
+                self.run = True
         return wrapper
 

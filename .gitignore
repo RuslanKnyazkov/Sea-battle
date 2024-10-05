@@ -3,5 +3,4 @@
 save/
 App/__pycache__
 Handler/__pycache__
-User/
 saverus_save.json
