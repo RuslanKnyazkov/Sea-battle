@@ -24,10 +24,10 @@ class Area(CTkFrame):
 
 
 class UserArea(Area):
-    def __init__(self, master: Any, **kwargs):
+    def __init__(self, master: Any, user: object ,  **kwargs):
         super().__init__(master, **kwargs)
 
-        self.label = CTkLabel(self, text='Player').grid(columnspan=11)
+        self.label = CTkLabel(self, text=user.name).grid(columnspan=11)
 
     def create_area(self):
         for column in enumerate(player_map.keys()):

@@ -18,13 +18,15 @@ class GameFrame(CTkFrame):
         for i in range(2): self.columnconfigure(index=i, weight=i)
 
         self.entry_user_name = CTkEntry(self, placeholder_text='Insert user name')
-        self.entry_user_name.pack(side = 'bottom')
+        self.entry_user_name.pack(side = 'top')
 
         self.btn_confirm = CTkButton(self, text='Confirm', command= self.bild_area)
-        self.btn_confirm.pack()
+        self.btn_confirm.pack(side = 'bottom')
 
     def bild_area(self):
-        self.__player_area = UserArea(self)
+        player = Player(name=self.entry_user_name.get())
+
+        self.__player_area = UserArea(self, user=player)
         self.__player_area.pack(side = 'left', padx = 30, expand = True, pady = 30)
         self.__player_area.create_area()
 
