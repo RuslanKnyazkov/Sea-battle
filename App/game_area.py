@@ -3,45 +3,11 @@ from random import randint, choice
 from customtkinter import CTkFrame, CTkLabel
 from typing import Any
 from config import player_map, ai_map, SHIPS, CHARACTERS
-#from Handler.handler import Handler
 
-#handler = Handler()
-#
-# class Cell(CTkFrame):
-#     def __init__(self, master: Any, view, column: str | int,
-#                  unique_id: int, row: str | int):
-#         super().__init__(master)
-#
-#         self.column = column
-#         self.row = row
-#         self.view = view
-#         self.unique = unique_id
-#
-#         self.color = CTkLabel(self, text=self.row - 1 if self.column == '0' else self.view if self.row == 1 else '',
-#                               fg_color='blue',
-#                               height=25, width=25)
-#         self.color.pack()
-#         self.color.bind('<Button-1>', command=lambda event: self.refactor_value_cell(event))
-#
-#     def set_color(self):
-#         """
-#         Setting color cell.
-#         """
-#         if self.row == 'x':
-#             self.color.configure(fg_color='red', text='X')
-#         elif self.row != 'x' and self.row != 1 and self.column != '0':
-#             self.color.configure(fg_color='white', text='O')
-#
-#     @handler.block_handler
-#     def refactor_value_cell(self, event):
-#         """
-#         Change values cell on symbol 'o' .
-#         :return: None
-#         """
-#         if str(self.__getattribute__('master')) == '.!gameframe.!aiarea':
-#             self.set_color()
-#             ai_map[self.column][self.unique] = 'o'
 
+# from Handler.handler import Handler
+
+# handler = Handler()
 
 class Area(CTkFrame):
     def __init__(self, master: Any, **kwargs):
@@ -56,6 +22,7 @@ class Area(CTkFrame):
         """ Function for override subclass"""
         return NotImplemented
 
+
 class UserArea(Area):
     def __init__(self, master: Any, **kwargs):
         super().__init__(master, **kwargs)
@@ -67,9 +34,9 @@ class UserArea(Area):
             for row in range(len(player_map[column[1]])):
                 title = column[1]
                 self.point_collect[f'{column[1]}:{row}'] = PlayerCell(self, view=title,
-                                                                column=column[1],
-                                                                row=player_map[column[1]][row],
-                                                                unique_id=row)
+                                                                      column=column[1],
+                                                                      row=player_map[column[1]][row],
+                                                                      unique_id=row)
                 self.point_collect[f'{column[1]}:{row}'].grid(column=column[0] + 1, row=row + 1, padx=1, pady=1)
     #     self.automatic_check()
     #
@@ -99,8 +66,8 @@ class AiArea(Area):
             for row in range(len(ai_map[column[1]])):
                 title = column[1] if row == 0 else ""
                 self.point_collect[f'{column[1]}:{row}'] = AiCell(self, view=title,
-                                                                column=column[1], row=ai_map[column[1]][row],
-                                                                unique_id=row)
+                                                                  column=column[1], row=ai_map[column[1]][row],
+                                                                  unique_id=row)
                 self.point_collect[f'{column[1]}:{row}'].grid(column=column[0] + 1, row=row + 1, padx=1, pady=1)
 
     def auto_plases_ship(self):

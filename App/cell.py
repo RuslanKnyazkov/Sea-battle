@@ -1,9 +1,9 @@
 from typing import Any
 from customtkinter import CTkFrame, CTkLabel
 from App.config import ai_map, player_map
+from Handler.handler import Handler
 
-
-
+hand = Handler()
 class Cell(CTkFrame):
     def __init__(self, master: Any, view, column: str | int,
                  unique_id: int, row: str | int):
@@ -28,15 +28,12 @@ class Cell(CTkFrame):
         elif self.row != 'x' and self.row != 1 and self.column != '0':
             self.color.configure(fg_color='white', text='O')
 
-    # @handler.block_handler
+
     def refactor_value_cell(self, event):
         """
-        Change values cell on symbol 'o' .
-        :return: None
+        Change values cell on symbol 'o'.
         """
-        if str(self.__getattribute__('master')) == '.!gameframe.!aiarea':
-            self.set_color()
-            ai_map[self.column][self.unique] = 'o'
+        raise NotImplemented
 
 
 class PlayerCell(Cell):
@@ -46,9 +43,10 @@ class PlayerCell(Cell):
                  row: str | int):
         super().__init__(master, view, column, unique_id, row)
 
-        self.color.bind('<Button-1>', command=lambda event: self.set_ship_position(event))
+        self.color.bind('<Button-1>', command=lambda event: self.refactor_value_cell(event))
 
-    def set_ship_position(self, event):
+
+    def refactor_value_cell(self, event):
         player_map[self.column][self.unique] = 'X'
         self.set_color()
 
@@ -62,5 +60,8 @@ class AiCell(Cell):
 
         self.color.bind('<Button-1>', command=lambda event: self.refactor_value_cell(event))
 
-
+    @hand.block_user_step
+    def refactor_value_cell(self, event):
+        self.set_color()
+        ai_map[self.column][self.unique] = 'o'
 
